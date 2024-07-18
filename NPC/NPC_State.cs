@@ -2,20 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyState
+public class NPC_State : MonoBehaviour
 {
-    protected EnemyStateMachine stateMachine;
-    protected Enemy enemyBase;
-    protected Rigidbody2D rb;
+    protected NPC_StateMachine stateMachine;
+    protected NPC NPCBase;
 
     private string animBoolName;
 
     protected float stateTimer;
     protected bool triggerCalled;
 
-    public EnemyState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName)
+    public NPC_State(NPC _NPCBase, NPC_StateMachine _stateMachine, string _animBoolName)
     {
-        this.enemyBase = _enemyBase;
+        this.NPCBase = _NPCBase;
         this.stateMachine = _stateMachine;
         this.animBoolName = _animBoolName;
     }
@@ -28,14 +27,13 @@ public class EnemyState
     public virtual void Enter()
     {
         triggerCalled = false;
-        rb = enemyBase.rb;
-        enemyBase.anim.SetBool(animBoolName, true);
+        NPCBase.anim.SetBool(animBoolName, true);
     }
 
     public virtual void Exit()
     {
-        enemyBase.anim.SetBool(animBoolName, false);
-        enemyBase.AssignLastAnimName(animBoolName);
+        NPCBase.anim.SetBool(animBoolName, false);
+        //NPCBase.AssignLastAnimName(animBoolName);
     }
 
     public virtual void AnimationFinishTrigger()

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
-    [SerializeField] protected LayerMask whatIsPlayer;   //用于检测玩家
-
+    //Enemy Basic Information
+    #region Information
     [Header("Stunned Info")]
     public float stunDuration;
     public Vector2 stunDirection;
@@ -16,11 +16,15 @@ public class Enemy : Entity
     public float moveSpeed;
     public float idleTime;
     public float battleTime;
+    private float defaultMoveSpeed;
 
     [Header("Attack Info")]
     public float attackDistance;
     public float attackCooldown;
     [HideInInspector] public float lastTimeAttacked;
+
+    [SerializeField] protected LayerMask whatIsPlayer;   //用于检测玩家
+    #endregion
 
     public EnemyStateMachine stateMachine { get; private set; }
 
@@ -29,6 +33,8 @@ public class Enemy : Entity
         base.Awake();
 
         stateMachine = new EnemyStateMachine();
+
+        defaultMoveSpeed = moveSpeed;
     }
 
     protected override void Update()
@@ -38,6 +44,44 @@ public class Enemy : Entity
         stateMachine.currentState.Update();
     }
 
+    public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
+
+    public virtual RaycastHit2D IsPlayerDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 100, whatIsPlayer);
+
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackDistance * facingDir, transform.position.y));
+    }
+
+    //Freeze the Time
+    #region Freeze
+    public virtual void FreezeTime(bool _timerFrozen)
+    {
+        if (_timerFrozen)
+        {
+            moveSpeed = 0;
+            anim.speed = 0;
+        }
+        else
+        {
+            moveSpeed = defaultMoveSpeed;
+            anim.speed = 1;
+        }
+    }
+
+    protected virtual IEnumerator FreezeTimeFor(float _seconds)
+    {
+        FreezeTime(true);
+        yield return new WaitForSeconds(_seconds);
+        FreezeTime(false);
+    }
+    #endregion
+
+    //Control Counter Window
+    #region Counter Window
     public virtual void OpenCounterAttackWindow()
     {
         canBeStunned = true;
@@ -49,10 +93,11 @@ public class Enemy : Entity
         canBeStunned = false;
         counterImage.SetActive(false);
     }
+    #endregion
 
     public virtual bool CanBeStunned()
     {
-        if(canBeStunned)
+        if (canBeStunned)
         {
             CloseCounterAttackWindow();
             return true;
@@ -60,15 +105,25 @@ public class Enemy : Entity
         return false;
     }
 
-    public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
+    //Control the enemy dead result
+    #region Dead
+    public string lastAnimBoolName { get; private set; }
 
-    public virtual RaycastHit2D IsPlayerDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, 50, whatIsPlayer);
+    public virtual void AssignLastAnimName(string _name) => lastAnimBoolName = _name;
+    #endregion 
 
-    protected override void OnDrawGizmos()
+    public override void slowEntityBy(float _slowPercent, float _slowDuration)
     {
-        base.OnDrawGizmos();
+        moveSpeed = moveSpeed * (1 -  _slowPercent);
+        anim.speed = anim.speed * (1 - _slowPercent);
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackDistance * facingDir, transform.position.y));
+        Invoke("returnDefaultSpeed", _slowDuration); //在规定时间后，触发指定函数
+    }
+
+    protected override void returnDefaultSpeed()
+    {
+        base.returnDefaultSpeed();
+
+        moveSpeed = defaultMoveSpeed;
     }
 }

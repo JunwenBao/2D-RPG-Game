@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateMachine
+public class NPC_StateMachine : MonoBehaviour
 {
-    public EnemyState currentState { get; private set; }
+    public NPC_State currentState { get; private set; }
 
-    public void Initialize(EnemyState _startState)
+    public void Initialize(NPC_State _startState)
     {
         currentState = _startState;
         currentState.Enter();
     }
 
-    public void ChangeState(EnemyState _newState)
+    public void ChangeState(NPC_State _newState)
     {
         currentState.Exit();
         currentState = _newState;
