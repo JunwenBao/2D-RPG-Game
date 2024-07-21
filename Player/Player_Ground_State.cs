@@ -36,7 +36,16 @@ public class Player_Ground_State : PlayerState
             stateMachine.ChangeState(player.attackState);
 
         //Shot
-        if (Input.GetKey(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1) && !player.isPulled)
             stateMachine.ChangeState(player.shotState);
+
+        if(Input.GetKeyUp(KeyCode.Mouse1) && player.isPulled)
+            stateMachine.ChangeState(player.release_State);
+
+        if (player.isShot)
+        {
+            stateMachine.ChangeState(player.idleState);
+            player.isShot = false;
+        }
     }
 }

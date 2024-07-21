@@ -7,8 +7,9 @@ using Unity.VisualScripting;
 
 public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private Image itemImage;
-    [SerializeField] private TextMeshProUGUI itemText;
+    [Header("Item Info")]
+    [SerializeField] private Image itemImage;           //Item Icon
+    [SerializeField] private TextMeshProUGUI itemText;  //Item Amount
 
     private UI ui;
     public InventoryItem item;

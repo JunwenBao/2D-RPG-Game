@@ -6,13 +6,16 @@ using UnityEngine.UI;
 
 public class UI_InGame : MonoBehaviour
 {
+    [Header("Health Bar")]
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private Slider slider;
-
     [SerializeField] private TextMeshProUGUI curHealth;
     [SerializeField] private TextMeshProUGUI maxHealth;
 
-    // Start is called before the first frame update
+    [Header("Coin Amount")]
+    [SerializeField] private ItemObject coin;
+    [SerializeField] private TextMeshProUGUI coinAmount;
+
     void Start()
     {
         if (playerStats != null)
@@ -24,6 +27,8 @@ public class UI_InGame : MonoBehaviour
     {
         maxHealth.text = playerStats.getMaxHealthValue().ToString();
         curHealth.text = playerStats.getCurrentHealth().ToString();
+
+        coinAmount.text = Inventory.instance.getCoinAmount().ToString();
     }
 
     private void UpdateHealthUI()

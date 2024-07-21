@@ -65,6 +65,7 @@ public class EnemyStats : CharacterStats
     protected override void Die()
     {
         base.Die();
+
         enemy.Die();
 
         myDropSystem.generateDrop();

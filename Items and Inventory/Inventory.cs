@@ -4,29 +4,32 @@ using System.Transactions;
 using UnityEditor;
 using UnityEditor.Search;
 using UnityEngine;
+using static UnityEditor.Progress;
 //作用：背包类
 
 public class Inventory : MonoBehaviour, ISaveManager
 {
     public static Inventory instance;
 
-    public List<ItemData> startingItems; //角色初始拥有的装备列表
+    public List<ItemData> startingItems; //角色初始拥有的全部物品列表
 
-    public List<InventoryItem> equipment;
+    public List<InventoryItem> equipment;//角色已装备的物品列表
     public Dictionary<ItemData_Equipment, InventoryItem> equipmentDictionary;
 
-    public List<InventoryItem> inventory;
+    public List<InventoryItem> inventory;//角色未装备的物品列表
     public Dictionary<ItemData, InventoryItem> inventoryDictionary;
 
-    public List <InventoryItem> stash;
+    public List <InventoryItem> stash;   //角色的其他物品（金币等）列表
     public Dictionary<ItemData, InventoryItem> stashDictionary;
 
     [Header("Inventory UI")]
+    [SerializeField] private Transform shop_InventorySlotParent; //商店的背包界面，与下面的四个不同
     [SerializeField] private Transform inventorySlotParent;
     [SerializeField] private Transform stashSlotParent;
     [SerializeField] private Transform equipmentSlotParent;
     [SerializeField] private Transform statSlotParent;
 
+    private UI_Shop_InventorySlot[] shop_InventoryItemnSlot; //商店的背包界面数组界面
     private UI_ItemSlot[] inventoryItemSlot;
     private UI_ItemSlot[] stashItemSlot;
     private UI_EquipmentSlot[] equipmentSlot;
@@ -36,12 +39,12 @@ public class Inventory : MonoBehaviour, ISaveManager
     public List<InventoryItem> loadedItems; //用于存储角色身上的物品
     public List<ItemData_Equipment> loadedEquipments;
 
+    public ItemData coin;
+
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
     }
 
     private void Start()
@@ -56,6 +59,7 @@ public class Inventory : MonoBehaviour, ISaveManager
         equipment = new List<InventoryItem>();
         equipmentDictionary = new Dictionary<ItemData_Equipment, InventoryItem>();
 
+        shop_InventoryItemnSlot = shop_InventorySlotParent.GetComponentsInChildren<UI_Shop_InventorySlot>();
         inventoryItemSlot = inventorySlotParent.GetComponentsInChildren<UI_ItemSlot>();
         stashItemSlot = stashSlotParent.GetComponentsInChildren<UI_ItemSlot>();
         equipmentSlot = equipmentSlotParent.GetComponentsInChildren<UI_EquipmentSlot>();
@@ -153,6 +157,7 @@ public class Inventory : MonoBehaviour, ISaveManager
         //2.更新物品栏
         for(int i = 0; i < inventoryItemSlot.Length; i++)
         {
+            shop_InventoryItemnSlot[i].cleanUpSlot();
             inventoryItemSlot[i].cleanUpSlot();
         }
 
@@ -164,6 +169,7 @@ public class Inventory : MonoBehaviour, ISaveManager
         //3.更新杂物栏
         for (int i = 0; i < inventory.Count; i++)
         {
+            shop_InventoryItemnSlot[i].UpdateSlot(inventory[i]);
             inventoryItemSlot[i].UpdateSlot(inventory[i]);
         }
 
@@ -228,15 +234,18 @@ public class Inventory : MonoBehaviour, ISaveManager
     }
     private void addToStash(ItemData _item)
     {
+        // 尝试从stashDictionary中获取与_item对应的InventoryItem对象
         if (stashDictionary.TryGetValue(_item, out InventoryItem value))
         {
-            value.addStack();
+            value.addStack(); // 如果获取成功，则调用该InventoryItem对象的addStack()方法
         }
+
+        // 如果获取失败（即_item在stashDictionary中不存在，创建一个新的InventoryItem对象，并使用_item作为参数
         else
         {
             InventoryItem newItem = new InventoryItem(_item);
-            stash.Add(newItem);
-            stashDictionary.Add(_item, newItem);
+            stash.Add(newItem); // 将新的InventoryItem对象添加到stash列表中
+            stashDictionary.Add(_item, newItem);// 同时将_item作为key，新创建的InventoryItem对象作为value，添加到stashDictionary中
         }
     }
     #endregion
@@ -343,4 +352,23 @@ public class Inventory : MonoBehaviour, ISaveManager
         return itemDataBase;
     }
     #endregion
+
+    //获取玩家所拥有的金钱数量
+    public int getCoinAmount()
+    {
+        if (stashDictionary.TryGetValue(coin, out InventoryItem value))
+        {
+            return value.stackSize;
+        }
+
+        return 0;
+    }
+
+    public void decreaseCoin(int _amount)
+    {
+        if (stashDictionary.TryGetValue(coin, out InventoryItem value))
+        {
+            value.stackSize -= _amount;
+        }
+    }
 }

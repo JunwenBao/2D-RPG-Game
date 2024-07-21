@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//作用：生成游戏中的实际物品
 
 public class ItemObject : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class ItemObject : MonoBehaviour
 
     //当脚本被加载时，或Inspector中任何值被修改，即会自动调用OnCalidate()
 
-    //渲染物品的图片
+    //渲染游戏中物品的图片
     private void setupVisuals()
     {
         if (itemData == null) return;

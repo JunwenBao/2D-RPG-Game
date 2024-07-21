@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skeleton_Battle_State : EnemyState
+public class Mino_Battle_State : EnemyState
 {
     private Transform player;
-    private Enemy_Skeleton enemy;
+    private Enemy_Mino enemy;
 
     private int moveDir;
     private bool moveLock = false;  //Lock the movement if the skeleton is too close to the player
 
-    public Skeleton_Battle_State(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, Enemy_Skeleton _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
+    public Mino_Battle_State(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, Enemy_Mino _enemy) : base(_enemyBase, _stateMachine, _animBoolName)
     {
         this.enemy = _enemy;
     }
@@ -19,11 +19,9 @@ public class Skeleton_Battle_State : EnemyState
     {
         base.Enter();
 
-        //Use PlayerManager,instead of:
-        //player = GameObject.Find("Player").transform;
         player = PlayerManager.instance.player.transform;
 
-        Debug.Log("battle!");
+        Debug.Log("Mino battle!");
     }
 
     public override void Exit()
@@ -47,8 +45,7 @@ public class Skeleton_Battle_State : EnemyState
 
             if (enemy.IsPlayerDetected().distance < enemy.attackDistance && canAttack())
             {
-                    stateMachine.ChangeState(enemy.attackState);
-                    Debug.Log("change to attack state");
+                stateMachine.ChangeState(enemy.attackState);
             }
         }
         else
@@ -64,7 +61,7 @@ public class Skeleton_Battle_State : EnemyState
         else if (player.position.x < enemy.transform.position.x)
             moveDir = -1;
 
-        if(!moveLock)
+        if (!moveLock)
             enemy.SetVelocity(enemy.moveSpeed * moveDir, rb.velocity.y);
     }
 

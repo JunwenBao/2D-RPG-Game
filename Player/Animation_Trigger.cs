@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class Animation_Trigger : MonoBehaviour
@@ -30,4 +31,22 @@ public class Animation_Trigger : MonoBehaviour
             }
         }
     }
+
+    //Éä¼ý¿ØÖÆ
+    public void ShootTrigger()
+    {
+        player.isPulled = false;
+        player.animationShootTrigger();
+    }
+
+    public void isPulled()
+    {
+        player.isPulled = true;
+    }
+
+    public void isShot()
+    {
+        player.isShot = true;
+    }
+
 }

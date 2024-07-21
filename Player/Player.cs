@@ -28,6 +28,17 @@ public class Player : Entity
     public bool isTalking;
     public GameObject bubble;
 
+    [Header("Arrow")]
+    public bool isPulled; //角色是否拉弓
+    public bool isShot;
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private float arrowSpeed;
+    [SerializeField] private int arrowDamage;
+
+    public bool isPointing; //判断角色是否在点击鼠标
+
+    private CharacterStats myStats;
+
     #endregion
 
     //2.角色的状态机：需要在Awake()中初始化
@@ -41,6 +52,7 @@ public class Player : Entity
     public Player_Attack_State attackState   { get; private set; }
     public Player_Dead_State   deadState     { get; private set; }
     public Player_Shot_State   shotState     { get; private set; }
+    public Player_ShotRelease_State release_State { get; private set; }
     #endregion
 
     protected override void Awake()
@@ -55,6 +67,7 @@ public class Player : Entity
         attackState  = new Player_Attack_State   (this, stateMachine, "Attack");
         deadState    = new Player_Dead_State     (this, stateMachine, "Die");
         shotState    = new Player_Shot_State     (this, stateMachine, "Shot");
+        release_State = new Player_ShotRelease_State(this, stateMachine, "Release");
     }
 
     protected override void Start()
@@ -118,5 +131,12 @@ public class Player : Entity
         moveSpeed = defaultMoveSpeed;
         jumpForce = defaultJumpForce;
         dashSpeed = defaultDashSpeed;
+    }
+
+    public void animationShootTrigger()
+    {
+        GameObject newArrow = Instantiate(arrowPrefab, attackCheck.position, Quaternion.identity);
+
+        newArrow.GetComponent<Arrow_Controller>().setupArrow(arrowSpeed * facingDir, stats);
     }
 }
