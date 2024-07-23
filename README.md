@@ -1,6 +1,6 @@
 # My 2D RPG Game
 This is my first game project, developed by Unity 2D engine. I try to use it study components in Unity, game desgin and programming. 
-<br>If you are interested in this project, it's my pleasure if you download and run the files **My Game.exe** in the folder **Demo**. The game process is very short but I will ensure that it will be improved in the future! When I finish this project, I will post it on website ~
+<br>If you are interested in this project, it's my pleasure if you download and run the game demo inside the zip file **Demo.zip** in branch **Master**. The game process is very short but I will ensure that it will be improved in the future! When I finish this project, I will post it on website ~
 <br>I really enjoy game programming, this is an amazing experience.
 ![屏幕截图 2024-07-21 055624](https://github.com/user-attachments/assets/c1ed6c26-4132-4d8e-bd3c-8aa4acce1c87)
 
