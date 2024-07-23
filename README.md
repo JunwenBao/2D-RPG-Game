@@ -1,5 +1,7 @@
-# 2D-RPG-Game
-This is my first game project, developed by Unity 2D engine. I try to use it study components in Unity, game desgin and programming. I really enjoy this journey, an amazing experience.
+# My 2D RPG Game
+This is my first game project, developed by Unity 2D engine. I try to use it study components in Unity, game desgin and programming. 
+<br>If you are interested in this project, it's my pleasure if you download and run the files **My Game.exe** in the folder **Demo**. The game process is very short but I will ensure that it will be improved in the future! When I finish this project, I will post it on website ~
+<br>I really enjoy game programming, this is an amazing experience.
 ![屏幕截图 2024-07-21 055624](https://github.com/user-attachments/assets/c1ed6c26-4132-4d8e-bd3c-8aa4acce1c87)
 
 ## Player Design
@@ -14,7 +16,7 @@ The player have 8 states: Idle, Move, Jump, fall, Squat, Attack, Shoot, Dead. Ea
 <br>Player has 3 additional transform: WallCheck, GroundCheck, AttackCheck. WallCheck is used to check whether player is touch the wall, GroundCheck is used to check whether player is standing on the ground. AttackCheck is used to determine whether player can attack enemys.
 
 ## Enemy Design
-We have 2 kinds enmey: skeleton and minotaur. 
+We have 2 kinds enmey: skeleton and minotaur, Each character has its own attack mode.
 
 ## Stats Design
 Each character has four main stats: **major stats, offensive stats, defensive stats, magic stats**. 
@@ -29,13 +31,25 @@ In this game we have 2 kinds item: **Materials and Equipments**.
 <br>Equipments can be equipped by player, it will add or decrease some attributes like damage or health.
 
 ## Inventory System
-
+![屏幕截图 2024-07-22 233852](https://github.com/user-attachments/assets/06cce9ca-cd21-4962-ab5d-1089e40b8e44)
 
 ## Save&Load System
-
+**Class GameData**: Record many important data like currency, check point, inventory, equipments.
+<br>
+<br>**interface ISaveManager**: Defined 2 funtions loadData() and saveData(), a lot classes will call this interface. For example: class Inventory will call this interface and override these 2 functions, when player need to save data, class SaveManager will find all classes which used this interface and run saveDta() inside class Inventory. 
+<br>
+<br>**Class FileDataHandler**: Save the file name and file storage location, responsible for saving the file to the specified location or loading the file from the specified location.
+<br>(1)Save Data: Transform object GameData to JASON file, then save it into specific location as .txt file.
+<br>(2)Load Data: Find .txt file in specific location and read contents, then transform it to object GameData.
+<br>
+<br>**Class SaveManager**: Responsible for calling loadData() and saveData() in all instances that use the interface ISaveManager.
 
 ## UI System
 
 
 ## Future Plan
-
+(1) Add 1 to 2 new enemies.
+<br>(2) Add 1 to 2 new scenes.
+<br>(3) Improve the skill tree.
+<br>(4) Improve the Craft.
+<br>(5) Add more Skills for player.
