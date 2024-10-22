@@ -24,6 +24,8 @@ public class Enemy : Entity
     [HideInInspector] public float lastTimeAttacked;
 
     [SerializeField] protected LayerMask whatIsPlayer;   //用于检测玩家
+
+    protected bool isDead; //记录敌人是否死亡
     #endregion
 
     public EnemyStateMachine stateMachine { get; private set; }

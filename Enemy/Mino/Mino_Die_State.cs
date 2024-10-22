@@ -14,6 +14,9 @@ public class Mino_Die_State : EnemyState
     public override void Enter()
     {
         base.Enter();
+
+        if (MissionManager.instance.num2 > 0)
+            MissionManager.instance.num2--;
     }
 
     public override void Exit()

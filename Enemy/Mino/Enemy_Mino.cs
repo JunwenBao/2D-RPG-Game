@@ -35,9 +35,10 @@ public class Enemy_Mino : Enemy
     {
         base.Update();
 
-        if(GetComponent<EnemyStats>().getCurrentHealth() < 0)
+        if(GetComponent<EnemyStats>().getCurrentHealth() < 0 && !isDead)
         {
             stateMachine.ChangeState(dieState);
+            isDead = true;
         }
     }
 }

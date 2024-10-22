@@ -22,7 +22,7 @@ public class Enemy_Skeleton : Enemy
         battleState = new Skeleton_Battle_State   (this, stateMachine, "Move", this);
         attackState = new Skeleton_Attack_State   (this, stateMachine, "Attack", this);
         stunnState  = new Skeleton_Stunn_State    (this, stateMachine, "Stunn", this);
-        deadState   = new Skeleton_Dead_State     (this, stateMachine, "Idle", this);
+        deadState   = new Skeleton_Dead_State     (this, stateMachine, "Die", this);
     }
 
     protected override void Start()
@@ -35,6 +35,12 @@ public class Enemy_Skeleton : Enemy
     protected override void Update()
     {
         base.Update();
+
+        if (GetComponent<EnemyStats>().getCurrentHealth() < 0 && !isDead)
+        {
+            stateMachine.ChangeState(deadState);
+            isDead = true;
+        }
     }
 
     public override void DamageEffect()
@@ -47,6 +53,9 @@ public class Enemy_Skeleton : Enemy
     public override void Die()
     {
         base.Die();
+
+        if(MissionManager.instance.num1 > 0)
+            MissionManager.instance.num1--;
 
         stateMachine.ChangeState(deadState);
     }

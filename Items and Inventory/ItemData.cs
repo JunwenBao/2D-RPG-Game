@@ -7,7 +7,8 @@ using UnityEngine.Playables;
 public enum ItemType
 {
     Material,
-    Equipment
+    Equipment,
+    UsableItem
 }
 
 [CreateAssetMenu(fileName = "New Item Data", menuName = "Data/Item")]
@@ -28,6 +29,9 @@ public class ItemData : ScriptableObject
 
     protected StringBuilder sb = new StringBuilder();
 
+    //道具效果
+    public int upHealth; //加血
+
     private void OnValidate()
     {
         //为每一个物品分配ID
@@ -41,5 +45,10 @@ public class ItemData : ScriptableObject
     public virtual string getDiscription()
     {
         return "";
+    }
+
+    public void UseItem()
+    {
+        PlayerManager.instance.player.stats.currentHealth += upHealth;
     }
 }

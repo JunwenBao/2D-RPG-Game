@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour, ISaveManager
         SceneManager.LoadScene(scene.name);
     }
 
-    public void loadData(GameData _data)
+    public void loadData(GameDataScriptable _data)
     {
         foreach (KeyValuePair<string, bool> pair in _data.checkpoints)
         {
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour, ISaveManager
         }
     }
 
-    public void saveData(ref GameData _data)
+    public void saveData(ref GameDataScriptable _data)
     {
         _data.closestCheckpointID = findClosestCheckpoint().checkpointID;
         _data.checkpoints.Clear();

@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCManager : MonoBehaviour
+public class DialogManager : MonoBehaviour
 {
-    public static NPCManager instance;
-    public NPC NPC01;
-    public NPC NPC02;
-    public NPC NPC03;
-    //public NPC NPC04;
+    public static DialogManager instance;
+
+    public Sprite avatar;         //NPC头像
+    public TextAsset textFile;    //文本文件
 
     private void Awake()
     {

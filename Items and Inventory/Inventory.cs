@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Transactions;
-using UnityEditor;
-using UnityEditor.Search;
 using UnityEngine;
-using static UnityEditor.Progress;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 //作用：背包类
 
 public class Inventory : MonoBehaviour, ISaveManager
@@ -19,7 +18,7 @@ public class Inventory : MonoBehaviour, ISaveManager
     public List<InventoryItem> inventory;//角色未装备的物品列表
     public Dictionary<ItemData, InventoryItem> inventoryDictionary;
 
-    public List <InventoryItem> stash;   //角色的其他物品（金币等）列表
+    public List <InventoryItem> stash;   //角色的道具栏（金币，药水等）列表
     public Dictionary<ItemData, InventoryItem> stashDictionary;
 
     [Header("Inventory UI")]
@@ -36,6 +35,7 @@ public class Inventory : MonoBehaviour, ISaveManager
     private UI_StatSlot[] statSlot;
 
     [Header("Database")]
+    public List<ItemData> itemDataBase;
     public List<InventoryItem> loadedItems; //用于存储角色身上的物品
     public List<ItemData_Equipment> loadedEquipments;
 
@@ -53,9 +53,11 @@ public class Inventory : MonoBehaviour, ISaveManager
         inventory = new List<InventoryItem>();
         inventoryDictionary = new Dictionary<ItemData, InventoryItem>();
 
+        //道具栏
         stash = new List<InventoryItem>();
         stashDictionary = new Dictionary<ItemData, InventoryItem>();
 
+        //装备栏
         equipment = new List<InventoryItem>();
         equipmentDictionary = new Dictionary<ItemData_Equipment, InventoryItem>();
 
@@ -173,6 +175,7 @@ public class Inventory : MonoBehaviour, ISaveManager
             inventoryItemSlot[i].UpdateSlot(inventory[i]);
         }
 
+        //更新道具栏
         for(int i = 0; i < stash.Count; i++)
         {
             stashItemSlot[i].UpdateSlot(stash[i]);
@@ -200,14 +203,17 @@ public class Inventory : MonoBehaviour, ISaveManager
         return true;
     }
 
+    //添加物品
     public void addItem(ItemData _item)
     {
         if (_item.itemType == ItemType.Equipment && canAddItem())
         {
+            Debug.Log("添加物品栏");
             addToInventory(_item);
         }
-        else if(_item.itemType == ItemType.Material)
+        else if(_item.itemType == ItemType.UsableItem)
         {
+            Debug.Log("添加道具栏");
             addToStash(_item);
         }
 
@@ -232,6 +238,7 @@ public class Inventory : MonoBehaviour, ISaveManager
         //2.更新UI
         UpdateSlotUI();
     }
+
     private void addToStash(ItemData _item)
     {
         // 尝试从stashDictionary中获取与_item对应的InventoryItem对象
@@ -284,11 +291,11 @@ public class Inventory : MonoBehaviour, ISaveManager
 
     #region Data Save&Load
     //载入数据
-    public void loadData(GameData _data)
+    public void loadData(GameDataScriptable _data)
     {
         foreach(KeyValuePair<string, int> pair in _data.inventory)
         {
-            foreach(var item in getItemDataBase())
+            foreach(var item in itemDataBase)
             {
                 if(item != null && item.itemId == pair.Key)
                 {
@@ -302,7 +309,7 @@ public class Inventory : MonoBehaviour, ISaveManager
 
         foreach(string loadedItemId in _data.equipmentId)
         {
-            foreach(var item in getItemDataBase())
+            foreach(var item in itemDataBase)
             {
                 if(item != null && item.itemId == loadedItemId)
                 {
@@ -313,7 +320,7 @@ public class Inventory : MonoBehaviour, ISaveManager
     }
 
     //保存数据
-    public void saveData(ref GameData _data)
+    public void saveData(ref GameDataScriptable _data)
     {
         _data.inventory.Clear();
         _data.equipmentId.Clear();
@@ -334,6 +341,10 @@ public class Inventory : MonoBehaviour, ISaveManager
         }
     }
 
+#if UNITY_EDITOR
+    [ContextMenu("Fill up item database")]
+    private void fillupItemDataBase() => itemDataBase = new List<ItemData>(getItemDataBase());
+
     //寻找所有的已知物品（无论角色是否拥有），并返回
     private List<ItemData> getItemDataBase()
     {
@@ -351,7 +362,8 @@ public class Inventory : MonoBehaviour, ISaveManager
 
         return itemDataBase;
     }
-    #endregion
+#endif
+#endregion
 
     //获取玩家所拥有的金钱数量
     public int getCoinAmount()
