@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : CharacterStats
 {
     private Player player;
+    public Slider slider;
 
     protected override void Start()
     {
@@ -29,5 +31,12 @@ public class PlayerStats : CharacterStats
         isDead = true;
 
         GetComponent<PlayerItemDrop>().generateDrop();
+    }
+
+    //¼ÓÑª
+    public void ModifyHealth(int num)
+    {
+        currentHealth += num;
+        //slider.value = currentHealth / 100;
     }
 }

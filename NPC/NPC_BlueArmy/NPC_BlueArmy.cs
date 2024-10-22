@@ -9,6 +9,10 @@ public class NPC_BlueArmy : NPC
     public GameObject button;
     public GameObject bubble;
 
+    public GameObject talkUI;
+    public Sprite avatar;         //头像
+    public TextAsset textFile;    //文本文件
+
     protected override void Awake()
     {
         base.Awake();
@@ -36,6 +40,13 @@ public class NPC_BlueArmy : NPC
         { 
             bubble.SetActive(false);
             //button.SetActive(true);
+        }
+
+        if (button.activeSelf && Input.GetKeyDown(KeyCode.E))
+        {
+            DialogManager.instance.avatar = avatar;
+            DialogManager.instance.textFile = textFile;
+            talkUI.SetActive(true);
         }
     }
 }

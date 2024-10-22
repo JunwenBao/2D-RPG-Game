@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,10 @@ public class UI_InGame : MonoBehaviour
     [SerializeField] private ItemObject coin;
     [SerializeField] private TextMeshProUGUI coinAmount;
 
+    [Header("Mission")]
+    public TextMeshProUGUI content1;
+    public TextMeshProUGUI content2;
+
     void Start()
     {
         if (playerStats != null)
@@ -27,8 +32,14 @@ public class UI_InGame : MonoBehaviour
     {
         maxHealth.text = playerStats.getMaxHealthValue().ToString();
         curHealth.text = playerStats.getCurrentHealth().ToString();
+        if (playerStats.getCurrentHealth() <= 0) curHealth.text = "0";
 
         coinAmount.text = Inventory.instance.getCoinAmount().ToString();
+
+        slider.value = playerStats.currentHealth;
+
+        content1.text = "Skeleton: " + MissionManager.instance.num1.ToString();
+        content2.text = "Mino: " + MissionManager.instance.num2.ToString();
     }
 
     private void UpdateHealthUI()

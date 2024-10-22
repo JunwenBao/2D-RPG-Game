@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class GameData
+public class GameDataScriptable
 {
     public int currency;
 
@@ -15,7 +15,7 @@ public class GameData
     public string closestCheckpointID;
 
     //Constructor
-    public GameData()
+    public GameDataScriptable()
     {
         currency = 0;
         inventory = new SerializableDictionary<string, int>();

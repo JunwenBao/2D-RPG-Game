@@ -19,6 +19,7 @@ public class UI_Shop : MonoBehaviour, IPointerDownHandler
 
     [Header("Confirm Board")]
     [SerializeField] private GameObject confirmBoard;
+    [SerializeField] private GameObject warnBoard;
     private bool isOpend_confirm = false;
 
 
@@ -72,7 +73,7 @@ public class UI_Shop : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            Debug.Log("NO MONEY");
+            warnBoard.SetActive(true);
         }
     }
 }

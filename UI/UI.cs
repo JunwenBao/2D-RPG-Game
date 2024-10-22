@@ -20,7 +20,9 @@ public class UI : MonoBehaviour
     public UI_Item_ToolTip itemToolTip;
     public UI_Stat_ToolTip statToolTip;
 
-    bool isOpen = false; //记录界面的开关情况
+    //记录界面的开关情况
+    bool isOpen = false;
+    GameObject currentUI;
 
     private void Awake()
     {
@@ -43,17 +45,39 @@ public class UI : MonoBehaviour
         isOpen = characterUI.activeSelf;
 
         //控制Character界面UI的开关
-        if (Input.GetKeyDown(KeyCode.Tab) && !isOpen)   switchTo(characterUI);
-        if (Input.GetKeyDown(KeyCode.Tab) &&  isOpen)   switchWithKeyTo(characterUI);
-
-        //控制Craft界面UI的开关
-        if (Input.GetKeyDown(KeyCode.B))    switchTo(craftUI);
-
-        //控制Skill Tree界面UI的开关
-        if (Input.GetKeyDown(KeyCode.K))    switchTo(skillTreeUI);
+        if (Input.GetKeyDown(KeyCode.Tab) && !isOpen)
+        {
+            characterUI.SetActive(true);
+            currentUI = characterUI;
+        }
+        if (Input.GetKeyDown(KeyCode.Tab) && isOpen)
+        {
+            characterUI.SetActive(false);
+            currentUI = null;
+        }
 
         //控制Option界面UI的开关
-        if (Input.GetKeyDown(KeyCode.O))    switchTo(optionUI);
+        if (Input.GetKeyDown(KeyCode.Escape) && isOpen) 
+        {
+            currentUI.SetActive(false);
+            optionUI.SetActive(true);
+            currentUI = optionUI;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && !isOpen)
+        {
+            optionUI.SetActive(true);
+            currentUI = optionUI;
+        }
+        //控制Craft界面UI的开关
+        //if (Input.GetKeyDown(KeyCode.B))    switchTo(craftUI);
+
+        //控制Skill Tree界面UI的开关
+        //if (Input.GetKeyDown(KeyCode.K))    switchTo(skillTreeUI);
+
+
+        //使用道具栏的道具
+        UpdateUseStash();
 
         //问题：未知原因，在开启游戏时，Stash栏自动设为FALSE
         StashUI.SetActive(true);
@@ -120,4 +144,38 @@ public class UI : MonoBehaviour
     }
 
     public void restartGameButton() => GameManager.instance.restartScene();
+
+    //放入Update()中，不断判断是否使用道具栏
+    public void UpdateUseStash()
+    {
+        List<InventoryItem> stash = Inventory.instance.stash; //获取道具栏中物品信息
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && stash[0].data)
+        {
+            ItemData item = stash[0].data;
+            if(item.itemType == ItemType.UsableItem) item.UseItem();
+            Debug.Log("使用道具栏1");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2) && stash[1].data)
+        {
+            ItemData item = stash[1].data;
+            if (item.itemType == ItemType.UsableItem) item.UseItem();
+            Debug.Log("使用道具栏2");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3) && stash[2].data)
+        {
+            ItemData item = stash[2].data;
+            if (item.itemType == ItemType.UsableItem) item.UseItem();
+            Debug.Log("使用道具栏3");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4) && stash[3].data)
+        {
+            ItemData item = stash[3].data;
+            if (item.itemType == ItemType.UsableItem) item.UseItem();
+            Debug.Log("使用道具栏4");
+        }
+    }
 }

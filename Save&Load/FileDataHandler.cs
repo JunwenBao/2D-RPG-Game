@@ -20,7 +20,7 @@ public class FileDataHandler
     }
 
     //保存
-    public void save(GameData _data)
+    public void save(GameDataScriptable _data)
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
 
@@ -48,10 +48,10 @@ public class FileDataHandler
     }
 
     //加载
-    public GameData load()
+    public GameDataScriptable load()
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
-        GameData loadData = null;
+        GameDataScriptable loadData = null;
 
         if(File.Exists(fullPath))
         {
@@ -70,7 +70,7 @@ public class FileDataHandler
                 //如果数据被加密：则执行解密
                 if(encryptData) dataToLoad = encryptDecrypt(dataToLoad);
 
-                loadData = JsonUtility.FromJson<GameData>(dataToLoad);
+                loadData = JsonUtility.FromJson<GameDataScriptable>(dataToLoad);
             }
 
             catch (Exception e)

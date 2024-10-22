@@ -11,10 +11,11 @@ public class SaveManager : MonoBehaviour
     [SerializeField] private string fileName; //存储的文件名
     [SerializeField] private bool encryptData;
 
-    private GameData gameData;
+    private GameDataScriptable gameData;
     private List<ISaveManager> saveManagers;
     private FileDataHandler dataHandler;
 
+    //删除存档文件
     [ContextMenu("Delete save file")]
     public void deleteSaveData()
     {
@@ -40,7 +41,7 @@ public class SaveManager : MonoBehaviour
     //新游戏
     public void newGame()
     {
-        gameData= new GameData();
+        gameData= new GameDataScriptable();
     }
 
     //加载游戏存档
