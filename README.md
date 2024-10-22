@@ -1,7 +1,8 @@
 # My 2D RPG Game
-This is my first game project, developed by Unity 2D engine. I try to use it study components in Unity, game desgin and programming. 
-<br>If you are interested in this project, it's my pleasure if you download and run the game demo inside the zip file **Demo.zip** in branch **Master**. The game process is very short but I will ensure that it will be improved in the future! When I finish this project, I will post it on website ~
-<br>I really enjoy game programming, this is an amazing experience.
+**Play on website now:** https://waynets.itch.io/warriors-game
+<br>This is my first Unity game project, developed by Unity 2D engine. I try to use it study components in Unity, game desgin and programming. 
+<br>The game process is very short becasue it's still a demo. But I will ensure that it will be improved in the future!
+<br>Really enjoy game programming, this is an amazing experience.
 ![屏幕截图 2024-07-21 055624](https://github.com/user-attachments/assets/c1ed6c26-4132-4d8e-bd3c-8aa4acce1c87)
 
 ## Player Design
@@ -45,7 +46,8 @@ In this game we have 2 kinds item: **Materials and Equipments**.
 <br>**Class SaveManager**: Responsible for calling loadData() and saveData() in all instances that use the interface ISaveManager.
 
 ## UI System
-
+Designed intuitive UI layouts and guidance systems to help players quickly adapt to and navigate the interface.
+<br>Implemented responsive design to support multiple resolutions, ensuring platform compatibility.
 
 ## Future Plan
 (1) Add 1 to 2 new enemies.
